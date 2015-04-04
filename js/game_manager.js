@@ -367,7 +367,7 @@ setTimeout(function() {
   }, 100);
 
 /**************/
-/** Agregado **/
+/** Fin de Agregado **/
 
 };
 
