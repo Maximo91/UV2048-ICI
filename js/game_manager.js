@@ -261,15 +261,6 @@ this.evaluateMatrix = function(matrix){
   return cc;
 }
  
-this.printMatrix = function(matrix){
-  for(var i = 0;i<4;i++){
-    var str = ""
-    for(var j = 0;j<4;j++)
-      str += matrix[i][j] + " ";
-    console.log(str)
-  }
-  console.log("******************************");
-}
  
 this.findFreeCell = function(matrix){
   var i,j,k=0;
@@ -290,9 +281,9 @@ this.findFreeCell = function(matrix){
 this.isEqualMatrix = function(m1,m2){
   for(var i = 0;i<4;i++)
     for(var j = 0;j<4;j++)
-      if(m1[i][j] != m2[i][j])
-        return false;
-  return true;
+      if(m1[i][j] = m2[i][j])
+        return true;
+  return false;
 }
  
 this.minMax = function(matrix, move, depth){
@@ -301,7 +292,6 @@ this.minMax = function(matrix, move, depth){
   var rmatrix = self.moveCells(self.createCopy(matrix),move);
   var areSame = self.isEqualMatrix(rmatrix, matrix);
   var score = self.evaluateMatrix(rmatrix);
- 
   if(areSame == true)
     return score-1;
   var maxVal=-1000,val,ret;
@@ -323,7 +313,6 @@ this.minMax = function(matrix, move, depth){
     var maxVal = 0,val,ret;
     for(var x = 0; x < 4;x++){
       val = this.minMax(self.createCopy(matrix),x,0);
-      // console.log("Score for "+ x + ":" + val )
       if(val > maxVal){
         maxVal = val;
         ret = x;
@@ -360,7 +349,6 @@ setTimeout(function() {
   matrix = self.getMatrix();
   var myMove = self.getMove(self.createCopy(matrix));
   var rmat = self.moveCells(self.createCopy(matrix), myMove);
-  console.log(myMove);
   if( self.isEqualMatrix(rmat,matrix))
     myMove = (Math.floor(Math.random()*100))%4;
   self.move(myMove);
