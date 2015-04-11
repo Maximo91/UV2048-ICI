@@ -189,6 +189,175 @@ GameManager.prototype.move = function (direction) {
     this.actuate();
 }
 
+<<<<<<< HEAD
+=======
+/**************/
+/** Agregado **/
+
+this.isValid = function(x,y){
+  if(x < 0 || x >3 || y <0 || y > 3)
+    return false;
+  return true;
+}  
+this.moveCells = function(matrix, move){
+  var dx = [-1,0,1,0];
+  var dy = [0,1,0,-1];
+  var nx,ny;
+  for(var k = 0;k<3;k++){
+    for(var i = 0;i<4;i++){
+      for(var j = 0; j<4; j++){
+       nx = i+dx[move];
+       ny = j+dy[move];
+       if(self.isValid(nx,ny)){
+          if(matrix[nx][ny] == 0){
+           matrix[nx][ny] = matrix[i][j];
+           matrix[i][j] = 0;
+         }
+        }
+      }
+    }
+  }
+  for(var i = 0;i<4;i++){
+      for(var j = 0; j<4; j++){
+        nx = i + dx[move];
+        ny = j + dy[move];
+        if(self.isValid(nx,ny)){
+          if(matrix[i][j] == matrix[nx][ny]){
+            matrix[nx][ny] *= -2;
+            matrix[i][j] = 0;
+          }
+        }
+      }
+    }
+    for(var k = 0;k<3;k++){
+    for(var i = 0;i<4;i++){
+      for(var j = 0; j<4; j++){
+        if(matrix[i][j] <0)
+          matrix[i][j] *= -1;
+        nx = i+dx[move];
+        ny = j+dy[move];
+        if(self.isValid(nx,ny)){
+          if(matrix[nx][ny] == 0){
+           matrix[nx][ny] = matrix[i][j];
+           matrix[i][j] = 0;
+          }
+        }
+      }
+    }
+  }
+  return matrix;
+}
+ 
+this.evaluateMatrix = function(matrix){
+  /* Count Number of Free Spaces */
+  var cc = 0;
+  for(var i = 0;i<4;i++)
+    for(var j = 0;j<4;j++){
+      if(matrix[i][j] == 0)
+        cc += 100;
+      else
+        cc += matrix[i][j]*matrix[i][j];
+    }
+ 
+  return cc;
+}
+ 
+ 
+this.findFreeCell = function(matrix){
+  var i,j,k=0;
+  do{
+    i =  (Math.floor(Math.random()*100))%4;
+    j =  (Math.floor(Math.random()*100))%4;
+    k++;
+  }while(matrix[i][j] != 0 && k != 500);
+  if(matrix[i][j] != 0)
+    for(i = 0;i<4;i++)
+      for(j = 0;j<4;j++)
+        if(matrix[i][j] == 0)
+          return ({x:i, y:j});
+ 
+  return ({x:i, y:j});
+}
+ 
+this.isEqualMatrix = function(m1,m2){
+  for(var i = 0;i<4;i++)
+    for(var j = 0;j<4;j++)
+      if(m1[i][j] = m2[i][j])
+        return true;
+  return false;
+}
+ 
+this.minMax = function(matrix, move, depth){
+  if(depth == 6)
+    return 0;
+  var rmatrix = self.moveCells(self.createCopy(matrix),move);
+  var areSame = self.isEqualMatrix(rmatrix, matrix);
+  var score = self.evaluateMatrix(rmatrix);
+  if(areSame == true)
+    return score-1;
+  var maxVal=-1000,val,ret;
+  var freeCell = self.findFreeCell(rmatrix);
+  if(freeCell.x == 4 || freeCell.y == 4)
+    console.log("YES VALUE IS 4 || " + freeCell.x + " | " + freeCell.y);
+  rmatrix[freeCell.x][freeCell.y] = 2;
+  for(var x = 0;x<4;x++)
+  {
+    val = this.minMax(self.createCopy(rmatrix), x, depth+1);
+    if(val > maxVal)
+      maxVal  = val;
+  }
+  return (score+maxVal);
+}
+ 
+  this.getMove = function(matrix){
+ 
+    var maxVal = 0,val,ret;
+    for(var x = 0; x < 4;x++){
+      val = this.minMax(self.createCopy(matrix),x,0);
+      if(val > maxVal){
+        maxVal = val;
+        ret = x;
+      }
+    }
+    return ret;
+  }
+ 
+  this.getMatrix = function(){
+    var matrix = [];
+    for (var i = 0 ; i <4 ; i++) {
+      var row = [];
+      for (var j = 0; j < 4; j++) {
+        tile = self.grid.cellContent({x:j, y:i});
+        if(tile == null)
+          row.push(0);
+        else
+          row.push(tile["value"]);
+      };
+      matrix.push(row);
+    };
+    return matrix;
+  }
+ 
+  this.createCopy = function(matrix){
+    var ret =[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    for(var i = 0; i < 4;i++)
+      for(var j = 0; j < 4; j++)
+        ret[i][j] = matrix[i][j].valueOf();
+    return ret;
+  }
+ 
+setTimeout(function() {
+  matrix = self.getMatrix();
+  var myMove = self.getMove(self.createCopy(matrix));
+  var rmat = self.moveCells(self.createCopy(matrix), myMove);
+  if( self.isEqualMatrix(rmat,matrix))
+    myMove = (Math.floor(Math.random()*100))%4;
+  self.move(myMove);
+  }, 100);
+
+/**************/
+/** Fin de Agregado **/
+>>>>>>> origin/master
 
 };
 
